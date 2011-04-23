@@ -1,0 +1,17 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Routing interface.
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Application\Routes
+*/
+namespace Wp\Application\Routes;
+
+interface IMvcRoute {
+    public function getController();
+    public function getAction();
+    public function asMvcRequest();
+}

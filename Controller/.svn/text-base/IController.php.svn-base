@@ -1,0 +1,16 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Controller Interface, for use with MVC Servers
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Controller
+*/
+
+namespace Wp\Controller;
+
+interface IController { 
+    public function setApplication(\Wp\Application $a);
+}

@@ -1,0 +1,23 @@
+<?php
+use \X\View\Template;
+
+class TemplateTest extends PHPUnit_Framework_TestCase {
+    private $fileMap;
+    
+    protected function setUp() {
+        $this->FileMap = new \X\Map\FileMap(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'TestApp');
+        $this->FileMap->setDir('views', 'Views');
+        $this->FileMap->setDir('layoutDir', 'Layouts');
+    }
+    
+    public function testRender() {
+        $tpl = new Template($this->FileMap, 'Default', 'index');
+        $this->assertEquals('index', $tpl->render());
+    }
+    
+    public function testRenderWithVar() {
+        $tpl = new Template($this->FileMap, 'Default', 'container');
+        $tpl->addVariable('content', 'container');
+        $this->assertEquals('#container#', $tpl->render());
+    }
+}

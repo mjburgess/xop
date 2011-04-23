@@ -1,0 +1,7 @@
+<?php
+namespace Wp\Model;
+
+interface IRelation {
+    public function getSql();
+}
+    

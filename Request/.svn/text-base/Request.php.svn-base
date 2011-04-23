@@ -1,0 +1,120 @@
+<?php 
+/** Wp - WebPasties Application Framework **
+* 
+* External Request Information (GET/POST).
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage External
+*/
+
+namespace Wp\External;
+
+class Request {
+    private $getData;
+        /** 
+        * @param array $getData
+        */
+        public function setGetData(array &$getData) {
+            $this->getData = $getData;
+        }
+        /**
+        * @returns array
+        */
+        public function getGetData() {
+            return $this->getData;
+        }
+        
+    private $postData;
+        /**
+        * @param array $postData    
+        */
+        public function setPostData(array &$postData) {
+            $this->postData = $postData;
+        }
+        /**
+        * @returns array
+        */
+        public function getPostData() {
+            return $this->postData;
+        }
+        
+    private $serverData;
+        
+    /**
+    * @param array $getData (typically $_GET)    
+    * @param array $postData (typically $_POST)
+    */
+    public function __construct(array $getData = null, array $postData = null, array $serverData = null) {
+        $getData = $getData ?: $_GET;
+        $postData = $postData ?: $_POST;
+        $serverData = $serverData ?: $_SERVER;
+        
+        $this->setGetData($getData);
+        $this->setPostData($postData);
+        $this->serverData = $serverData;
+    } 
+    
+    public function postSent() {
+        return $this->serverData['REQUEST_METHOD'] == 'POST';
+    }
+    
+    public function getSent() {
+        return $this->serverData['REQUEST_METHOD'] == 'GET';
+    }
+    public function postHas($key) {
+        return isset($this->postData[$key]);
+    }  
+    
+    public function getHas($key) {
+        return isset($this->getData[$key]);
+    }
+    /** 
+    * @param string $key 
+    * @param [int] $filter = FILTER_DEFAULT
+    * @param [mixed] $options
+    * @returns mixed (typically string)
+    */
+    public function fromGet($key, $filter = FILTER_DEFAULT, $options = array()) {
+        return filter_var($this->getData[$key], $filter, $options);
+    }
+    /**
+    * @param mixed (basic|array) $key
+    * @param mixed $value
+    * @returns Wp\External\Request
+    */
+    public function setGet($key, $value) {
+        if(is_array($key)) {
+            $this->getData(array_merge($this->getData, $value));
+        } else {
+            $this->getData[$key] = $value;
+        }
+        
+        return $this;
+    }
+    
+    /** 
+    * @param string $key 
+    * @param [int] $filter = FILTER_DEFAULT
+    * @param [mixed] $options
+    * @returns mixed (typically string)
+    */
+    public function fromPost($key, $filter = FILTER_DEFAULT, $options = null) {
+        return filter_var($this->postData[$key], $filter, $options);
+    }
+    /**
+    * @param mixed (basic|array) $key
+    * @param mixed $value
+    * @returns Wp\External\Request
+    */
+    public function setPost($key, $value) {
+        if(is_array($key)) {
+            $this->postData(array_merge($this->getData, $value));
+        } else {
+            $this->postData[$key] = $value;
+        }
+        
+        return $this;
+    }
+}

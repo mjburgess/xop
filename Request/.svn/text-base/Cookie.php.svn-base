@@ -1,0 +1,30 @@
+<?php 
+/** Wp - WebPasties Application Framework **
+* 
+* Cookie Access
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage External
+*/
+namespace Wp\External;
+
+class Cookie {
+        private $cookieData;    
+        /**
+        * @param array $cookieData
+        */
+        public function setCookieData(array $cookieData) {
+            $this->cookieData = $cookieData;
+        }
+        /** 
+        * @returns array
+        */
+        public function getCookieData() {
+            return $this->cookieData;
+        }
+        
+    public function setCookie() {}
+    public function deleteCookie() {}
+}

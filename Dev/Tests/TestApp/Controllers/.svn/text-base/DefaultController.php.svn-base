@@ -1,0 +1,22 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Default Controller
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Controller
+*/
+
+namespace Wp\Dev\Tests\TestApp\Controllers;
+
+class DefaultController extends \Wp\Controller\AController {
+    public function index() {
+        if($this->template) {
+            $this->template->addVariable('name', $this->template->getName());
+        } else { //we're using the basic mvc server
+            return 'BasicIndex';
+        }
+    }
+}

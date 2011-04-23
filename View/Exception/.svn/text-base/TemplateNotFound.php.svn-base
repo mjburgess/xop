@@ -1,0 +1,30 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* View File Not Found
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage ?
+*/
+
+namespace Wp\View\Exception;
+
+class TemplateNotFound extends \Exception {
+    private $template;
+        public function setTemplate(\Wp\View\Template $tpl) {
+            $this->template = $tpl;
+        }
+        /**
+        * @returns \Wp\View\Template
+        */
+        public function getTemplate() {
+            return $this->template;
+        }
+        
+    public function __construct(\Wp\View\Template $tpl) {
+        $this->setTemplate($tpl);
+        parent::__construct('Template (View File) ' . $tpl . ' Not Found');
+    }    
+}

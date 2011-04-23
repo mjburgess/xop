@@ -1,0 +1,16 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Application Request Interface
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Application
+*/
+
+namespace Wp\Application;
+
+interface IRequest {
+    
+}

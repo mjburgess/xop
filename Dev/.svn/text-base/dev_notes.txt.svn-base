@@ -1,0 +1,21 @@
+Main namespace:
+Wp
+
+Namespace Structure:
+Wp\Folder\SubFolder
+Wp\SubPackage\etc
+
+
+All Files Commented:
+
+/** Wp - WebPasties Application Framework **
+* 
+* [Class Desc]
+* 
+* @author [name]
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage [working namespace]
+*
+*/
+

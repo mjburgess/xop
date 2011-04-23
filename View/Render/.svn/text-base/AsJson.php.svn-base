@@ -1,0 +1,18 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* JSON Rendering
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage ?
+*/
+
+namespace Wp\View\Render;
+
+class AsJson implements RenderInterface {
+    public function render(\Wp\View\Template $tpl) {
+        return json_encode($tpl->getVariables());
+    }
+}

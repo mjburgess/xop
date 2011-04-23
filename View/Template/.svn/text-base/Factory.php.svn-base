@@ -1,0 +1,20 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Template factory, produces View\Templates from IApplicationRequests/MvcRequests, etc.
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage View
+*/
+
+namespace Wp\View\Template;
+use \Wp\Application\MvcRequest;
+use \Wp\Map\FileMap;
+
+class Factory {
+    public static function fromMvcRequest(FileMap $fm, MvcRequest $ar, $vars = array()) {
+        return new  \Wp\View\Template($fm, $ar->getController(false), $ar->getAction(), $vars);
+    }
+}

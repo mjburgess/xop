@@ -1,0 +1,16 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Interface for Template Renderers
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage View\Render
+*/
+
+namespace Wp\View\Render;
+
+interface IRender {
+    public function render(\Wp\View\Template $tpl);
+}

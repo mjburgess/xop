@@ -1,0 +1,17 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Server Interface
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage ?
+*/
+namespace Wp\Application\Server;
+
+interface IServer {
+    public function setApplication(\Wp\Application $app);
+    public function registerServer();
+    public function serve();
+}

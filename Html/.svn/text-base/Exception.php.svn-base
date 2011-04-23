@@ -1,0 +1,14 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Default Package Exception
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Html
+*/
+
+namespace Wp\Html;
+
+class Exception extends \Exception {}

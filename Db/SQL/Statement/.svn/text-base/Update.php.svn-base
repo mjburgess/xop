@@ -1,0 +1,34 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Update statement
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Db\SQL\Statement
+*/
+
+namespace Wp\Db\SQL\Statement;
+
+class Update extends \Wp\Db\SQL\AStatement {
+    /**
+    * @returns \Wp\Db\SQL\Statement\Update
+    */
+    public function table($table) {
+        $this->setSql("UPDATE $table SET ");
+        return $this;
+    }
+    
+    /**
+    * @returns \Wp\Db\SQL\Statement\Update
+    */
+    public function set(array $data) {
+        $bound = array();
+        foreach($data as $f => $v){
+            $bound[] = "$f = :$f";
+        }
+        $this->sqlAppend(implode(', ', $bound));
+        return $this;
+    }
+}

@@ -1,0 +1,84 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Controller Abstract
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Controller
+*/
+namespace Wp\Controller;
+use Wp\View\Template, \Wp\Model;
+
+abstract class AController implements IController {
+    
+    protected $application;
+        /**
+        * @param \Wp\Application $app
+        * @returns \Wp\Controller\AController (inherited)
+        */
+        public function setApplication(\Wp\Application $app) {
+            $this->application = $app;
+            return $this;
+        }
+        /**
+        * @returns \Wp\Application\MvcRequest
+        */ 
+        public function getApplication() {
+            return $this->application;
+        }
+    
+    /**
+    * View
+    * 
+    * @var \Wp\View
+    */
+    protected $view;
+        /**
+        * @param \Wp\View $v
+        * @returns \Wp\Controller\AController (inherited)
+        */
+        public function setView(\Wp\View $v) {
+            $this->view = $v;
+            return $this;
+        }
+        /**
+        * @returns \Wp\View
+        */ 
+        public function getView() {
+            return $this->view;
+        }
+            
+
+    protected $template;
+        /**
+        * @param \Wp\View\Template
+        * @returns \Wp\Controller\AController (inherited)
+        */
+        public function setTemplate(\Wp\View\Template $tpl) {
+            $this->template = $tpl;
+            return $this;
+        }
+        /**
+        * @returns \Wp\View\Template 
+        */ 
+        public function getTemplate() {
+            return $this->template;
+        }
+    
+    public function setUpView($layout = null) {
+        $fMap   = $this->application->getFileMap();
+        $mvcReq = $this->application->getApplicationRequest();
+        
+        $this->template = Template\Factory::fromMvcRequest($fMap, $mvcReq);
+        
+        $this->view = new \Wp\View();        
+        $this->view->registerCascadingTemplate($this->template);
+        
+        if($layout) {
+            $layout = new Template($fMap, $fMap->getDir('layoutDir'), $layout);
+            $this->view->setLayout($layout);
+        }
+    }
+}

@@ -1,0 +1,27 @@
+<?php
+namespace Wp\Dev\Tests\TestApp;
+
+define('LIBROOT', dirname(dirname(dirname(__DIR__))));
+set_include_path(get_include_path() . PATH_SEPARATOR . LIBROOT);
+
+require 'ClassLoader.php';
+
+$cl = new \Wp\ClassLoader('Wp', LIBROOT . DIRECTORY_SEPARATOR);
+$cl->register();
+
+$config = new \Wp\Config();
+$config->add('Application', 'root', __DIR__);
+$config->add('Application', 'routingClass', 'Wp\Application\Routes\MvcDefaultRoute');
+
+$config->add('DirMap', 'views', 'Views');
+$config->add('DirMap', 'layoutDir', 'Layouts');
+
+$config->add('Namespaces', 'project', __NAMESPACE__);
+$config->add('Namespaces', 'controller', 'Controllers');
+$config->add('Namespaces', 'model', 'Models');
+
+$config->add('View', 'layout', 'default');
+$config->add('View', 'tplExtension', '.phtml');
+
+$app = \Wp\Application\MvcFactory::fromConfig($config);
+echo $app();

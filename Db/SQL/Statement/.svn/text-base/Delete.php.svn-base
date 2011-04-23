@@ -1,0 +1,23 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Delete Statement
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Db\SQL\Statement
+*/
+
+namespace Wp\Db\SQL\Statement;
+
+class Delete extends \Wp\Db\SQL\AStatement {
+    /**
+    * @returns \Wp\Db\SQL\Statement\Delete
+    */
+    public function from($table) {
+        $this->setSql("DELETE FROM $table");
+        
+        return $this;
+    }
+}

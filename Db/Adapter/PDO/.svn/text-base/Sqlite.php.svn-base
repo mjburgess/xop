@@ -1,0 +1,27 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Adapter Abstract
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Db
+*/
+
+namespace Wp\Db\Adapter\PDO;
+
+class Sqlite extends \Wp\Db\AAdapter {
+    public function __construct(array $conOpts) {
+        $dsn = sprintf('%s:%s', $conOpts['driver'], $conOpts['name']);
+        $this->pdo = new \PDO($dsn, $conOpts['username'], $conOpts['password']);
+    }   
+    
+    public function createTable($table, $fields) {
+        $f = array();
+        foreach($fields as $field => $type) {
+            $f[] = "$field $type";
+        }
+        $this->pdo->query('CREATE TABLE ' . $table . '(' . implode(',', $f) . ');');
+    }
+}

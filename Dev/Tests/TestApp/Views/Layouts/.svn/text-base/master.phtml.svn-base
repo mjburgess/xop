@@ -1,0 +1,1 @@
+%<?php echo $view->getTemplate('menu')->render(); ?><?php echo $content; ?>%

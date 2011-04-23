@@ -1,0 +1,48 @@
+<?php
+use \X\Acl\Resource, \X\Acl\Role;
+
+class AclTest extends PHPUnit_Framework_Testcase {
+    private $acl;
+    
+    public function setUp() {        
+        $this->acl = new \X\Acl();
+
+        $this->acl->addRole(new Role('admin'));
+        $this->acl->addRole(new Role('guest'));
+        
+        $this->acl->addRole(new Role('limited'), 'guest');
+        $this->acl->addRole(new Role('member'),  'limited');
+        $this->acl->addRole(new Role('super'),  'member');
+        
+        //forum heirarchy (Forum->Cars->BMWs) | Role Heirarchy (Member->BMW->Car->Forum)
+        $this->acl->addRole(new Role('bmwMod'), 'member');
+        $this->acl->addRole(new Role('carMod'), 'bmwMod');
+        $this->acl->addRole(new Role('forumMod'), 'carMod');
+        
+
+        $this->acl->addResource(new Resource('site', array(
+                     array('read',   'limited'),
+                     array('write',  'super'),
+                     array('edit',   'super'),
+                     array('delete', 'admin'),
+                     array('selfAdmin',  'member'))));
+                     
+        $this->acl->addResource(new Resource('forum'), 'site');
+        $this->acl->addResource(new Resource('carForum', array(array('edit', 'carMod'))), 'forum');
+        $this->acl->addResource(new Resource('bmwForum', array(array('edit', 'bmwMod'))), 'carForum');
+    }
+    
+    public function testAllowed() { 
+        $this->assertEquals(false, $this->acl->allowed('guest',   'site',  'read'));
+        $this->assertEquals(true,  $this->acl->allowed('limited', 'site',  'read'));
+        $this->assertEquals(true,  $this->acl->allowed('super',   'site',  'edit'));
+        $this->assertEquals(false, $this->acl->allowed('carMod',  'forum', 'edit'));
+        $this->assertEquals(false, $this->acl->allowed('bmwMod',  'forum', 'edit'));
+        
+        $this->assertEquals(true,  $this->acl->allowed('carMod',  'carForum', 'edit'));
+        $this->assertEquals(true,  $this->acl->allowed('carMod',  'bmwForum', 'edit'));
+        $this->assertEquals(true,  $this->acl->allowed('bmwMod',  'bmwForum', 'edit'));
+        $this->assertEquals(true, $this->acl->allowed('carMod',   'site', 'read'));
+        $this->assertEquals(true, $this->acl->allowed('bmwMod',   'site', 'selfAdmin'));
+    }
+}

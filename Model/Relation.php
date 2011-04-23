@@ -1,0 +1,79 @@
+<?php
+namespace X\Model;
+use \X\Db\SQL\Statement;
+class Relation implements IRelation {
+    const HasMany = 1;
+    const HasOne = 2;
+    const HasManyThru = 3;
+    
+    public $type;
+    public $left;
+    public $right;
+    public $join;
+    
+    
+    public $options = array('fields' => '*', 'readFrom' => 0);
+    
+    public function __construct($left, $type, $right, $join = '') {
+        $this->type = $type;
+        
+        list($this->left, $this->lr) = explode('.', $left);
+        list($this->right, $this->rl) = explode('.', $right);
+        list($this->join, $this->jl, $this->jr) = explode('.', $join);
+    }
+    
+    public function lrLink() {
+        return "$this->left.$this->lr";
+    }
+    public function rlLink() {
+        return "$this->right.$this->rl";
+    }
+    public function jrLink() {
+        return "$this->join.$this->jr";
+    }
+    public function jlLink() {
+        return "$this->join.$this->jl";
+    }
+   
+    
+    public function getSql(array &$where = array(), AModel $from = null) {
+        switch($this->type) {
+            case self::HasMany : return $this->readManySql($where, $from->{$this->rl});
+            case self::HasOne  : return $this->readOneSql($where, $from->{$this->rl});
+            case self::HasManyThru : return $this->readThruSql($where, $from->{$this->rl});
+        }
+    }
+    
+    public function readOneSql(array &$where = array(), $datum, $many = false) {
+        $sql = Statement::select()->fields($this->options['fields'], $this->left)
+                           ->from($this->left)
+                           ->where($where + array($this->lrLink() => true));
+                           
+        if($many && isset($this->options['limit'])) {
+            $sql->limit($this->options['readFrom'], $this->options['limit']);
+        } else {
+            $sql->limit($this->options['readFrom'], 1);
+        }
+                           
+        $where[str_replace('.', '_', $this->lrLink())] = $datum;
+        return $sql;
+    }
+    
+    public function readManySql(array &$where = array(), $datum) {
+        return $this->readOneSql($where, $datum, true);
+    }
+    
+    public function readThruSql(array &$where = array(), $datum) {
+        $sql = Statement::select()->fields($this->options['fields'], $this->left)
+                           ->from(array($this->left, $this->join))
+                           ->where($where + array($this->jrLink() => true))
+                           ->andWhere($this->jlLink() . '=' . $this->lrLink());
+                           
+        if(isset($this->options['limit'])) {
+            $sql->limit($this->options['readFrom'], $this->options['limit']);
+        }
+                           
+        $where[str_replace('.', '_', $this->jrLink())] = $datum;
+        return $sql;
+    }
+}

@@ -1,0 +1,60 @@
+<?php 
+/** Wp - WebPasties Application Framework **
+* 
+* Application Request Information ($controller, $action).
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Application
+*/
+
+namespace Wp\Application;
+
+class MvcRequest implements IRequest {
+    private $controller;
+        /**
+        * @param string $controller
+        * @returns Wp\Application\MvcRequest
+        */
+        public function setController($controller) {
+            $this->controller = $controller;
+            return $this;
+        }
+        /**
+        * @returns string
+        */
+        public function getController($clsName = true) {
+            return $this->controller . ($clsName ? 'Controller' : '');
+        }
+        
+    private $action; 
+        /**
+        * @param string $action    
+        * @returns Wp\Application\MvcRequest
+        */
+        public function setAction($action){
+            $this->action = $action;
+            return $this;
+        }
+        /**
+        * @returns string
+        */
+        public function getAction() {
+            return $this->action;
+        }
+    
+    /** 
+    * @returns string $controller.$action
+    */
+    public function __toString() {
+        return $this->getController() . '::' . $this->getAction();
+    }
+    
+    /** 
+    * @param [Wp\Application\Routes\IUrlRoute] $route
+    */
+    public function __construct($controller, $action) {
+        $this->setController($controller)->setAction($action);
+    }
+}

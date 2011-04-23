@@ -1,0 +1,15 @@
+<?php
+class TemplateFactoryTest extends PHPUnit_Framework_TestCase {
+    private $fileMap;
+    
+    protected function setUp() {
+        $this->fileMap = new \Wp\Map\FileMap(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'TestApp');
+        $this->fileMap->setDir('views', 'Views');
+    }
+    
+    public function testFromMvcRequest() {
+        $ar  = new \Wp\Application\MvcRequest('Default', 'index');
+        $tpl = \Wp\View\Template\Factory::fromMvcRequest($this->fileMap, $ar);
+        $this->assertEquals('index', $tpl->render());
+    }
+}

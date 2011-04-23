@@ -1,0 +1,16 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Pastie Event System
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage APastie
+*/
+
+namespace Wp\Pastie;
+
+abstract class APastie {
+    
+}

@@ -1,0 +1,28 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Action not found exception
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage ?
+*/
+
+namespace Wp\Application\Exception;
+
+class MvcActionNotFound extends \Exception {
+    private $mvcRequest;
+        public function setMvcRequest(\Wp\Application\MvcRequest $request) {
+            $this->mvcRequest = $r;
+        }
+        
+        public function getMvcRequestt() {
+            return $this->mvcRequest;
+        }
+    
+    public function __construct(\Wp\Application\MvcRequest $request) {
+        $this->setMvcRequest($request);
+        parent::__construct('Action ' . $request. ' Not Found');
+    }
+}

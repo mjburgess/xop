@@ -1,0 +1,17 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* View Helper interface
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage View
+*/
+
+namespace Wp\View;
+
+interface IHelper {
+    public function setView(\Wp\View $v);
+    public function getName();
+}

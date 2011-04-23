@@ -1,0 +1,93 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* 
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage ?
+*/
+
+namespace Wp\Application\Server;
+
+class MvcServer implements IServer {    
+    private $application;
+        /**
+        * @param \Wp\Application
+        * @returns \Wp\Application\Server\MvcServer
+        */
+        public function setApplication(\Wp\Application $app) {
+            $this->application = $app;
+            return $this;
+        }
+        /**
+        * @returns \Wp\Application
+        */ 
+        public function getApplication() {
+            return $this->application;
+        }
+
+    /**
+    * @var \Wp\Controller\AController
+    */
+    private $controller;
+        /**
+        * @param \Wp\Controller\AController | string (class name)
+        * @returns \Wp\Application\MvcServer
+        */
+        public function setController(\Wp\Controller\IController $controllerClass) {
+            $this->controller = $controllerClass;
+            return $this;
+        }
+        /**
+        * @returns \Wp\Controller\AController
+        */ 
+        public function getController() {
+            return $this->controller;
+        }
+        
+        
+    public function __construct(\Wp\Application $app) {
+        $this->setApplication($app);
+        $this->registerServer();
+        $this->loadController();
+    }
+    
+    public function registerServer() {
+        $this->application->setServer($this);
+    }
+    
+    public function loadController() {
+        $mvcReq = $this->application->getApplicationRequest();
+        $appMap = $this->application->getApplicationMap();                                                                
+        $clName = $appMap->getClass('controller', $mvcReq->getController());
+       
+        $this->controller = new $clName();
+        $this->controller->setApplication($this->application);
+    }
+    
+    public function setUpView($layout = null, $tplExt = null){
+        if($tplExt) {
+            \Wp\View\Template::setExtension($tplExt);
+        }
+        $this->controller->setUpView($layout);
+    }
+    
+    public function setUpModels($adapter, array $config) {
+        \Wp\Model\AModel::setDefaultAdapter(new $adapter($config));
+    }
+    
+    public function serve() {
+        $mvcRequest = $this->application->getApplicationRequest();
+        if(method_exists($this->controller, $method = $mvcRequest->getAction())) {
+            if($c = $this->controller->$method()) {
+                return $c;
+            } else {
+                return $this->controller->getView()->render();
+            }
+        } else {
+            throw new Exception\ActionNotFound($mvcRequest);
+        }
+    }
+}

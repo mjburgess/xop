@@ -1,0 +1,16 @@
+<?php
+define('LIBROOT', dirname(dirname(__DIR__)));
+set_include_path(get_include_path() . PATH_SEPARATOR . LIBROOT);
+
+require 'ClassLoader.php';
+
+$cl = new \Wp\ClassLoader('Wp', LIBROOT . DIRECTORY_SEPARATOR);
+$cl->register();
+
+class BaseTest extends PHPUnit_Framework_Testcase {
+    public function testClassLoader() {        
+        global $cl;
+        $this->assertEquals($cl->getProjectNamespace(), 'Wp');
+        $this->assertEquals($cl->getLibDir(), LIBROOT . DIRECTORY_SEPARATOR);       
+    }
+}

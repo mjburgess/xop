@@ -1,0 +1,21 @@
+Main namespace:
+X
+
+Namespace Structure:
+X\Folder\SubFolder
+X\SubPackage\etc
+
+
+All Files Commented:
+
+/** X - xphp.org Application Framework **
+* 
+* [Class Desc]
+* 
+* @author [name]
+* @copyright xphp.org, 2010. All Rights Reserved.
+* @package X
+* @subpackage [working namespace]
+*
+*/
+

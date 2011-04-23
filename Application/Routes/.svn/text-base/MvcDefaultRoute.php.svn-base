@@ -1,0 +1,85 @@
+<?php
+/** Wp - WebPasties Application Framework **
+* 
+* Default URL Route for an Action Request
+* 
+* @author mjburgess
+* @copyright WebPasties, 2010. All Rights Reserved.
+* @package Wp
+* @subpackage Application\Routes
+*/
+
+namespace Wp\Application\Routes;
+
+class MvcDefaultRoute implements IMvcRoute {
+    private static $defaultController = 'Default';
+        /**
+        * @param string Controller Name
+        */
+        public static function setDefaultController($cName) {
+            self::$defaultController = $cName;
+        }
+        /**
+        * @returns string Controller Name
+        */ 
+        public static function getDefaultController() {
+            return self::$defaultController;
+        }
+    
+    private static $defaultAction = 'index';
+        /**
+        * @param string Action (method) Name
+        */
+        public static function setDefaultAction($aName) {
+            self::$defaultAction = $aName;
+        }
+        /**
+        * @returns string Action (method) name
+        */ 
+        public static function getDefaultAction() {
+            return self::$defaultAction;
+        }
+    
+    
+    private $request;
+        /**
+        * @param \Wp\External\Request $r
+        * @returns \Wp\External\Request
+        */
+        public function setRequest(\Wp\External\Request $r) {
+            $this->request = $r;
+            return $this;
+        }
+        /**
+        * @returns \Wp\External\Request
+        */ 
+        public function getRequest() {
+            return $this->request;
+        }
+    
+    public function __construct(\Wp\External\Request $r = null) {
+        if($r) { 
+            $this->setRequest($r);
+        }
+    }
+    
+    public function asMvcRequest() {
+        return new \Wp\Application\MvcRequest($this->getController(), $this->getAction());
+    }
+    
+    public function getController() {
+        if($this->request->getHas('controller')) {
+            return $this->request->fromGet('controller');
+        } else {
+            return self::$defaultController;
+        }
+    }
+    
+    public function getAction() {
+        if($this->request->getHas('action')) {
+            return $this->request->fromGet('action');
+        } else {
+            return self::$defaultAction;
+        }
+    }
+}
